@@ -1,101 +1,167 @@
-import Image from "next/image";
+'use client';
+
+import { useState, useEffect } from 'react';
+import CarLoader from '@/components/preloader/car-loader';
+import AuthScreen from '@/components/auth/auth-screen';
+import MapDisplay from '@/components/features/navigation/map-display';
+import VehicleStatus from '@/components/features/monitoring/vehicle-status';
+import Controls from '@/components/features/controls/controls';
+import QuickControls from '@/components/features/controls/quick-controls';
+import WeatherDisplay from '@/components/features/weather/weather-display';
+import DriverMonitoring from '@/components/features/driver/driver-monitoring';
+import MoodDetection from '@/components/features/driver/mood-detection';
+import VoiceAssistant from '@/components/features/voice/voice-assistant';
+import CollisionAvoidance from '@/components/features/monitoring/collision-avoidance';
+import VehicleSecurity from '@/components/features/security/vehicle-security';
+import SmartHomeIntegration from '@/components/features/smart-home/smart-home-integration';
+import FamilyAlerts from '@/components/features/safety/family-alerts';
+import BiometricAuth from '@/components/features/security/biometric-auth';
+import GestureControl from '@/components/features/controls/gesture-control';
+import { Card } from '@/components/ui/card';
+import { MapPin, Navigation, Radio } from 'lucide-react';
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+ const [loading, setLoading] = useState(true);
+ const [authenticated, setAuthenticated] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+ useEffect(() => {
+   setTimeout(() => {
+     setLoading(false);
+   }, 2000);
+ }, []);
+
+ if (loading) return <CarLoader />;
+ if (!authenticated) return <AuthScreen onAuthenticate={() => setAuthenticated(true)} />;
+
+ return (
+   <main className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800">
+     <div className="container-custom">
+       <div className="grid-layout">
+         {/* Left Column */}
+         <div className="sidebar">
+           <div className="component-grid">
+             <QuickControls />
+             <Controls />
+             <VehicleSecurity />
+             <VehicleStatus 
+               batteryLevel={82}
+               temperature={24}
+               speed={65}
+               range={285}
+               alerts={[
+                 "Tire pressure low - Front right",
+                 "Service due in 500km"
+               ]}
+             />
+           </div>
+         </div>
+
+         {/* Middle Column */}
+         <div className="main-content">
+           <Card className="flex-1 p-4">
+             {/* Navigation Header */}
+             <div className="mb-4 flex-between">
+               <h1 className="text-2xl font-bold">Vehicle Navigation</h1>
+               <div className="flex items-center gap-2">
+                 <span className="text-sm text-gray-500">Live GPS</span>
+                 <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+               </div>
+             </div>
+
+             {/* Map Container */}
+             <div className="relative h-[300px] rounded-lg overflow-hidden">
+               <MapDisplay />
+             </div>
+
+             {/* Collision Avoidance */}
+             <div className="mt-4">
+               <Card className="p-4 bg-gray-800/50">
+                 <CollisionAvoidance distances={{ front: 11.7, left: 0.3, right: 3.2 }} />
+               </Card>
+             </div>
+
+             {/* Split into two columns */}
+             <div className="grid grid-cols-2 gap-4 mt-4">
+               {/* Left Column Features */}
+               <div className="space-y-4">
+                 <FamilyAlerts />
+                 <DriverMonitoring />
+                 <MoodDetection />
+                 <Card className="p-4">
+                   <h2 className="mb-4 text-lg font-semibold">Media Controls</h2>
+                   <div className="p-3 rounded-lg bg-purple-900/20">
+                     <div className="flex items-center gap-3">
+                       <Radio className="text-purple-500" />
+                       <div>
+                         <p className="font-medium">Now Playing</p>
+                         <p className="text-sm text-gray-400">Favorite Playlist</p>
+                       </div>
+                     </div>
+                   </div>
+                 </Card>
+               </div>
+
+               {/* Right Column Features */}
+               <div className="space-y-4">
+                 <WeatherDisplay />
+                 <SmartHomeIntegration />
+               </div>
+             </div>
+           </Card>
+         </div>
+
+         {/* Right Column */}
+         <div className="sidebar">
+           <div className="component-grid">
+             <BiometricAuth />
+             <VoiceAssistant />
+             <GestureControl />
+             {/* Trip Information */}
+             <Card className="p-4 bg-gray-800/50">
+               <h3 className="mb-4 text-lg font-semibold">Trip Information</h3>
+               <div className="grid grid-cols-3 gap-4">
+                 <div className="p-3 text-center rounded-lg bg-gray-900/50">
+                   <p className="text-sm text-gray-400">ETA</p>
+                   <p className="font-semibold">25 mins</p>
+                 </div>
+                 <div className="p-3 text-center rounded-lg bg-gray-900/50">
+                   <p className="text-sm text-gray-400">Distance</p>
+                   <p className="font-semibold">15.5 km</p>
+                 </div>
+                 <div className="p-3 text-center rounded-lg bg-gray-900/50">
+                   <p className="text-sm text-gray-400">Traffic</p>
+                   <p className="font-semibold text-green-500">Light</p>
+                 </div>
+               </div>
+             </Card>
+             {/* Route Options */}
+             <Card className="p-4 bg-gray-800/50">
+               <h2 className="mb-4 text-lg font-semibold">Route Options</h2>
+               <div className="space-y-3">
+                 <div className="p-3 rounded-lg bg-blue-900/20">
+                   <div className="flex items-center gap-3">
+                     <Navigation className="text-blue-500" />
+                     <div>
+                       <p className="font-medium">Fastest Route</p>
+                       <p className="text-sm text-gray-400">25 mins</p>
+                     </div>
+                   </div>
+                 </div>
+                 <div className="p-3 rounded-lg bg-gray-900/50">
+                   <div className="flex items-center gap-3">
+                     <MapPin className="text-gray-400" />
+                     <div>
+                       <p className="font-medium">Alternate Route</p>
+                       <p className="text-sm text-gray-400">32 mins</p>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+             </Card>
+           </div>
+         </div>
+       </div>
+     </div>
+   </main>
+ );
 }
